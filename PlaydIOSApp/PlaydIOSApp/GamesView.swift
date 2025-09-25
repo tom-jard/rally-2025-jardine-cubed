@@ -17,9 +17,9 @@ struct GamesView: View {
                 ], spacing: 16) {
                     ForEach(games) { game in
                         GameAppCard(game: game) {
-                            selectedGame = game
+                            print("🎯 GET button tapped for \(game.name)")
                             redemptionAmount = game.conversionRate
-                            showRedeemSheet = true
+                            selectedGame = game
                         }
                     }
                 }
@@ -34,14 +34,15 @@ struct GamesView: View {
         .onAppear {
             loadGames()
         }
-        .sheet(isPresented: $showRedeemSheet) {
-            if let game = selectedGame {
-                RedeemSheet(
-                    game: game,
-                    amount: $redemptionAmount,
-                    isPresented: $showRedeemSheet
-                )
-                .environmentObject(userState)
+        .sheet(item: $selectedGame) { game in
+            RedeemSheet(
+                game: game,
+                amount: $redemptionAmount,
+                isPresented: .constant(true)
+            )
+            .environmentObject(userState)
+            .onAppear {
+                print("🎯 Sheet presenting for \(game.name)")
             }
         }
     }
@@ -233,6 +234,7 @@ struct RedeemSheet: View {
     @State private var showSuccess = false
     @State private var showDeepLinkAlert = false
     @StateObject private var deepLinkManager = DeepLinkManager.shared
+    @Environment(\.dismiss) private var dismiss
 
     private var rollOptions = [10, 25, 50]
 
@@ -335,7 +337,7 @@ struct RedeemSheet: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
-                        isPresented = false
+                        dismiss()
                     }
                 }
             }
@@ -355,16 +357,16 @@ struct RedeemSheet: View {
                     if !success {
                         print("Failed to open \(game.name), user will need to open manually")
                     }
-                    isPresented = false
+                    dismiss()
                 }
             }
             Button("Get from App Store") {
                 deepLinkManager.openAppStore(game) { success in
-                    isPresented = false
+                    dismiss()
                 }
             }
             Button("OK") {
-                isPresented = false
+                dismiss()
             }
         } message: {
             Text("Your \(selectedAmount) \(game.currencyName.lowercased()) are ready!")
