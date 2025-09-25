@@ -2,17 +2,29 @@ import axios from 'axios';
 
 // Determine API URL based on environment
 const getApiUrl = () => {
-  // If running in production (Vercel), use the same domain for API
-  if (import.meta.env.PROD) {
-    return '/api'; // Relative path for production
+  // Check if we're running on Vercel or production
+  if (typeof window !== 'undefined' && (
+    window.location.hostname.includes('vercel.app') || 
+    window.location.hostname.includes('playd.app') ||
+    import.meta.env.PROD
+  )) {
+    return '/api'; // Relative path for production/Vercel
   }
   // If running locally, use localhost backend
   return import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 };
 
 // Create axios instance with base configuration
+const baseURL = getApiUrl();
+console.log('🔧 API Base URL:', baseURL);
+console.log('🌍 Environment:', {
+  hostname: typeof window !== 'undefined' ? window.location.hostname : 'server',
+  prod: import.meta.env.PROD,
+  mode: import.meta.env.MODE
+});
+
 const apiClient = axios.create({
-  baseURL: getApiUrl(),
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },
