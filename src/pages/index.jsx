@@ -1,7 +1,5 @@
 import Layout from "./Layout.jsx";
 
-import Games from "./Games";
-
 import Earn from "./Earn";
 
 import Home from "./Home";
@@ -9,8 +7,6 @@ import Home from "./Home";
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 
 const PAGES = {
-    
-    Games: Games,
     
     Earn: Earn,
     
@@ -28,7 +24,7 @@ function _getCurrentPage(url) {
     }
 
     const pageName = Object.keys(PAGES).find(page => page.toLowerCase() === urlLastPart.toLowerCase());
-    return pageName || Object.keys(PAGES)[0];
+    return pageName || 'Home'; // Default to Home instead of first page
 }
 
 // Create a wrapper component that uses useLocation inside the Router context
@@ -40,10 +36,7 @@ function PagesContent() {
         <Layout currentPageName={currentPage}>
             <Routes>            
                 
-                    <Route path="/" element={<Games />} />
-                
-                
-                <Route path="/Games" element={<Games />} />
+                <Route path="/" element={<Home />} />
                 
                 <Route path="/Earn" element={<Earn />} />
                 
