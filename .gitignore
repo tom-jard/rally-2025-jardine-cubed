@@ -1,4 +1,14 @@
-# Dependencies
+# iOS/Swift files (from colleague)
+.DS_Store
+/.build
+/Packages
+xcuserdata/
+DerivedData/
+.swiftpm/configuration/registries.json
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.netrc
+
+# Web app dependencies
 node_modules/
 */node_modules/
 
@@ -21,7 +31,6 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # OS generated files
-.DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
