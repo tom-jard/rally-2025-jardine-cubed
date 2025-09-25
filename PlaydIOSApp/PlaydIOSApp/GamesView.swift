@@ -30,7 +30,7 @@ struct GamesView: View {
                     .fontWeight(.semibold)
             }
         }
-        .navigationTitle("Redeem Coins")
+        .navigationTitle("Redeem Darumas")
         .onAppear {
             loadGames()
         }
@@ -164,8 +164,8 @@ struct GameAppCard: View {
                         .lineLimit(2)
                         .multilineTextAlignment(.center)
 
-                    // Cost
-                    Text("\(game.conversionRate) coins")
+                    // Cost Range
+                    Text("from \(minDarumaCost(for: game)) darumas")
                         .font(.caption2)
                         .foregroundColor(.secondary)
 
@@ -192,10 +192,22 @@ struct GameAppCard: View {
         }
     }
 
+    private func minDarumaCost(for game: Game) -> Int {
+        let rollOptions = [10, 25, 50]
+        let minRolls = rollOptions.min() ?? 10
+        return minRolls * (game.conversionRate / game.currencyAmount)
+    }
+
+    private func maxDarumaCost(for game: Game) -> Int {
+        let rollOptions = [10, 25, 50]
+        let maxRolls = rollOptions.max() ?? 50
+        return maxRolls * (game.conversionRate / game.currencyAmount)
+    }
+
     private func redeemCoins() {
         let amount = game.conversionRate
         if amount > userState.coinBalance {
-            alertMessage = "Insufficient coins! Need \(amount) but only have \(userState.coinBalance)."
+            alertMessage = "Insufficient darumas! Need \(amount) but only have \(userState.coinBalance)."
             showAlert = true
             return
         }
@@ -283,7 +295,7 @@ struct RedeemSheet: View {
                                     .font(.headline)
                                     .foregroundColor(.primary)
 
-                                Text("\(rolls * (game.conversionRate / game.currencyAmount)) coins")
+                                Text("\(rolls * (game.conversionRate / game.currencyAmount)) darumas")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -317,7 +329,7 @@ struct RedeemSheet: View {
 
                 // Purchase button - iOS style
                 Button(action: purchaseRolls) {
-                    Text("Purchase for \(coinCost) coins")
+                    Text("Purchase for \(coinCost) darumas")
                         .font(.headline)
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
