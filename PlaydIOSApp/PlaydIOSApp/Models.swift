@@ -11,6 +11,7 @@ struct Game: Identifiable, Codable {
     let deepLink: String
     let appStoreURL: String
     let bundleIdentifier: String
+    let alternateSchemes: [String]
 
     var conversionText: String {
         return "\(conversionRate) coins = \(currencyAmount) \(currencyName.lowercased())"

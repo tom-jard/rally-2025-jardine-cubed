@@ -7,9 +7,61 @@ class DeepLinkManager: ObservableObject {
     private init() {}
 
     func openApp(_ game: Game, completion: @escaping (Bool) -> Void) {
-        // For demo purposes, since we can't register URL schemes in this context,
-        // we'll go directly to the App Store
-        openAppStore(game, completion: completion)
+        print("💡 Attempting to open \(game.name) with deep link: \(game.deepLink)")
+
+        guard let url = URL(string: game.deepLink) else {
+            print("❌ Invalid URL: \(game.deepLink)")
+            DispatchQueue.main.async {
+                completion(false)
+            }
+            return
+        }
+
+        if UIApplication.shared.canOpenURL(url) {
+            print("✅ Can open URL, attempting to launch \(game.name)")
+            UIApplication.shared.open(url) { success in
+                DispatchQueue.main.async {
+                    print(success ? "✅ Successfully opened \(game.name)" : "❌ Failed to open \(game.name)")
+                    completion(success)
+                }
+            }
+        } else {
+            print("❌ Cannot open URL: \(game.deepLink)")
+            DispatchQueue.main.async {
+                completion(false)
+            }
+        }
+    }
+
+    private func showNoDeepLinkAlert(for game: Game) {
+        // This would ideally show an alert, but since we can't from here,
+        // we'll just log for now
+        print("💡 Deep linking not available for \(game.name). Most games don't support third-party deep links for security reasons.")
+    }
+
+    private func findWorkingScheme(for game: Game) -> String? {
+        print("🔍 Testing schemes for \(game.name):")
+
+        // Try primary scheme first
+        print("  Testing primary: \(game.deepLink)")
+        if let primaryURL = URL(string: game.deepLink),
+           UIApplication.shared.canOpenURL(primaryURL) {
+            print("  ✅ Primary scheme works: \(game.deepLink)")
+            return game.deepLink
+        }
+
+        // Try alternate schemes
+        for scheme in game.alternateSchemes {
+            print("  Testing alternate: \(scheme)")
+            if let url = URL(string: scheme),
+               UIApplication.shared.canOpenURL(url) {
+                print("  ✅ Alternate scheme works: \(scheme)")
+                return scheme
+            }
+        }
+
+        print("  ❌ No working schemes found for \(game.name)")
+        return nil
     }
 
     func openAppStore(_ game: Game, completion: @escaping (Bool) -> Void) {
@@ -41,9 +93,6 @@ class DeepLinkManager: ObservableObject {
     }
 
     func isAppInstalled(_ game: Game) -> Bool {
-        guard let deepLinkURL = URL(string: game.deepLink) else {
-            return false
-        }
-        return UIApplication.shared.canOpenURL(deepLinkURL)
+        return findWorkingScheme(for: game) != nil
     }
 }

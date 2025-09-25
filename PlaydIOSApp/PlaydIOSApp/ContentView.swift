@@ -52,15 +52,15 @@ struct HeaderView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .environmentObject(GameCenterManager.shared)
             .environmentObject(UserState.shared)
+            .environmentObject(DeepLinkManager.shared)
             .preferredColorScheme(.dark)
     }
 }
 
 #Preview {
     ContentView()
-        .environmentObject(GameCenterManager.shared)
         .environmentObject(UserState.shared)
+        .environmentObject(DeepLinkManager.shared)
         .preferredColorScheme(.dark)
 }

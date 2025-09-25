@@ -56,9 +56,17 @@ struct GamesView: View {
                 dollarValue: 1.00,
                 currencyName: "Rolls",
                 currencyAmount: 100,
-                deepLink: "monopolygo://",
-                appStoreURL: "https://apps.apple.com/us/app/monopoly-go/id1496506010",
-                bundleIdentifier: "com.scopely.monopolygo"
+                deepLink: "https://mply.io/gN269OQpyfc",
+                appStoreURL: "https://apps.apple.com/us/app/monopoly-go/id1621328561",
+                bundleIdentifier: "com.scopely.monopolygo",
+                alternateSchemes: [
+                    "monopolygo://",
+                    "com.scopely.monopolygo://",
+                    "https://go.monopolygo.com/",
+                    "https://monopolygo.com/",
+                    "monopoly-go://",
+                    "scopely://"
+                ]
             ),
             Game(
                 id: "candy-crush",
@@ -70,7 +78,8 @@ struct GamesView: View {
                 currencyAmount: 80,
                 deepLink: "candycrushsaga://",
                 appStoreURL: "https://apps.apple.com/us/app/candy-crush-saga/id553834731",
-                bundleIdentifier: "com.king.candycrushsaga"
+                bundleIdentifier: "com.king.candycrushsaga",
+                alternateSchemes: ["king://", "com.king.candycrushsaga://", "candy-crush://"]
             ),
             Game(
                 id: "madden-mobile",
@@ -81,8 +90,9 @@ struct GamesView: View {
                 currencyName: "Madden Cash",
                 currencyAmount: 150,
                 deepLink: "maddennfl://",
-                appStoreURL: "https://apps.apple.com/us/app/madden-nfl-24-mobile-football/id1052222233",
-                bundleIdentifier: "com.ea.game.maddenmobile"
+                appStoreURL: "https://apps.apple.com/us/app/madden-nfl-26-mobile-football/id1512265589",
+                bundleIdentifier: "com.ea.game.maddenmobile",
+                alternateSchemes: ["com.ea.game.maddenmobile://", "madden://", "ea://"]
             ),
             Game(
                 id: "royal-match",
@@ -93,8 +103,9 @@ struct GamesView: View {
                 currencyName: "Coins",
                 currencyAmount: 120,
                 deepLink: "royalmatch://",
-                appStoreURL: "https://apps.apple.com/us/app/royal-match/id1458154515",
-                bundleIdentifier: "com.dreamgames.royalmatch"
+                appStoreURL: "https://apps.apple.com/us/app/royal-match/id1482155847",
+                bundleIdentifier: "com.dreamgames.royalmatch",
+                alternateSchemes: ["com.dreamgames.royalmatch://", "royal-match://", "dreamgames://"]
             ),
             Game(
                 id: "roblox",
@@ -106,7 +117,8 @@ struct GamesView: View {
                 currencyAmount: 200,
                 deepLink: "roblox://",
                 appStoreURL: "https://apps.apple.com/us/app/roblox/id431946152",
-                bundleIdentifier: "com.roblox.RobloxPlayer"
+                bundleIdentifier: "com.roblox.RobloxPlayer",
+                alternateSchemes: ["com.roblox.RobloxPlayer://", "robloxmobile://"]
             ),
             Game(
                 id: "clash-of-clans",
@@ -118,7 +130,8 @@ struct GamesView: View {
                 currencyAmount: 130,
                 deepLink: "clashofclans://",
                 appStoreURL: "https://apps.apple.com/us/app/clash-of-clans/id529479190",
-                bundleIdentifier: "com.supercell.magic"
+                bundleIdentifier: "com.supercell.magic",
+                alternateSchemes: ["supercell://", "com.supercell.magic://", "clash://"]
             )
         ]
     }
@@ -330,32 +343,32 @@ struct RedeemSheet: View {
         }
         .alert("Success!", isPresented: $showSuccess) {
             Button("OK") {
+                print("🎯 First alert OK tapped, showing deep link alert")
                 showDeepLinkAlert = true
             }
         } message: {
             Text("Purchased \(selectedAmount) \(game.currencyName.lowercased()) for \(game.name)!")
         }
-        .alert("Open \(game.name)?", isPresented: $showDeepLinkAlert) {
-            if deepLinkManager.isAppInstalled(game) {
-                Button("Open App") {
-                    deepLinkManager.openApp(game) { success in
-                        isPresented = false
+        .alert("Purchase Complete!", isPresented: $showDeepLinkAlert) {
+            Button("Open App") {
+                print("🎯 Open App button tapped for \(game.name)")
+                deepLinkManager.openApp(game) { success in
+                    if !success {
+                        print("Failed to open \(game.name), user will need to open manually")
                     }
-                }
-            } else {
-                Button("Open in App Store") {
-                    deepLinkManager.openAppStore(game) { success in
-                        isPresented = false
-                    }
+                    isPresented = false
                 }
             }
-            Button("Maybe Later") {
+            Button("Get from App Store") {
+                deepLinkManager.openAppStore(game) { success in
+                    isPresented = false
+                }
+            }
+            Button("OK") {
                 isPresented = false
             }
         } message: {
-            Text(deepLinkManager.isAppInstalled(game) ?
-                 "Your \(game.currencyName.lowercased()) are ready! Open \(game.name) to use them." :
-                 "\(game.name) isn't installed. Get it from the App Store to use your \(game.currencyName.lowercased()).")
+            Text("Your \(selectedAmount) \(game.currencyName.lowercased()) are ready!")
         }
     }
 
@@ -364,10 +377,14 @@ struct RedeemSheet: View {
             return
         }
 
+        print("🎯 Starting purchase for \(game.name) - \(coinCost) coins")
         NetworkManager.shared.redeemCoins(gameId: game.id, coinsToSpend: coinCost) { success, message in
             if success {
+                print("🎯 Purchase successful, showing success alert")
                 userState.updateBalance(userState.coinBalance - coinCost)
                 showSuccess = true
+            } else {
+                print("🎯 Purchase failed: \(message)")
             }
         }
     }
