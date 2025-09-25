@@ -322,26 +322,32 @@ function Dashboard({ token, company, onLogout }) {
           className={`tab ${activeTab === 'actions' ? 'active' : ''}`}
           onClick={() => setActiveTab('actions')}
         >
-          Recent Transactions
+          Company Rewards
         </button>
         <button
           className={`tab ${activeTab === 'transactions' ? 'active' : ''}`}
           onClick={() => setActiveTab('transactions')}
         >
-          Recent Action Changes
+          Recent Transactions
         </button>
       </div>
 
       {activeTab === 'actions' && (
         <div>
           <div className="section-header">
-            <h2 className="section-title">Company Actions & Values</h2>
+            <h2 className="section-title">Company Rewards & Values</h2>
+            <button
+              className="btn"
+              onClick={() => setShowNewForm(true)}
+            >
+              Add New Reward
+            </button>
           </div>
-          <p className="welcome-text">Welcome, {company?.name}! Manage your reward actions and their dollar values below.</p>
+          <p className="welcome-text">Welcome, {company?.name}! Manage your reward programs and their dollar values below.</p>
 
           {showNewForm && (
             <div className="form-card">
-              <h3>Create New Action</h3>
+              <h3>Create New Reward</h3>
               <div className="form-grid">
                 <div className="form-group">
                   <label>Name</label>
@@ -374,7 +380,7 @@ function Dashboard({ token, company, onLogout }) {
                   onClick={() => createAction(newAction)}
                   disabled={!newAction.name || !newAction.value}
                 >
-                  Create Action
+                  Create Reward
                 </button>
                 <button
                   className="btn btn-secondary"
@@ -394,7 +400,7 @@ function Dashboard({ token, company, onLogout }) {
           ) : (
             <div className="actions-table">
               <div className="table-header">
-                <div>ACTION</div>
+                <div>REWARD</div>
                 <div>VALUE (USD)</div>
                 <div>DESCRIPTION</div>
                 <div>ACTIONS</div>
@@ -433,19 +439,13 @@ function Dashboard({ token, company, onLogout }) {
             </div>
           )}
 
-          <button
-            className="add-action-btn"
-            onClick={() => setShowNewForm(true)}
-          >
-            + Add New Action
-          </button>
         </div>
       )}
 
       {activeTab === 'transactions' && (
         <div>
           <div className="section-header">
-            <h2 className="section-title">User Reward Transactions</h2>
+            <h2 className="section-title">Recent Reward Transactions</h2>
           </div>
           {transactions.length === 0 ? (
             <div className="no-data">
@@ -455,7 +455,7 @@ function Dashboard({ token, company, onLogout }) {
             <div className="transactions-table">
               <div className="table-header">
                 <div>USER</div>
-                <div>ACTION</div>
+                <div>REWARD</div>
                 <div>VALUE</div>
                 <div>WHEN</div>
               </div>
