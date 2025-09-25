@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/server.js"
+    }
+  ],
+  "env": {
+    "PLAID_CLIENT_ID": "68d44d11d58efa00251413e1",
+    "PLAID_SECRET": "047a640b4e33dc44257278f7f9a718",
+    "PLAID_ENV": "sandbox",
+    "NODE_ENV": "production"
+  }
+}

@@ -2,7 +2,16 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
+  "functions": {
+    "api/*.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
@@ -18,5 +27,10 @@
         }
       ]
     }
-  ]
+  ],
+  "env": {
+    "PLAID_CLIENT_ID": "68d44d11d58efa00251413e1",
+    "PLAID_SECRET": "047a640b4e33dc44257278f7f9a718",
+    "PLAID_ENV": "sandbox"
+  }
 }
