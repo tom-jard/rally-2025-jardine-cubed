@@ -1,28 +1,38 @@
-# 🪆 Play'd - The Revolutionary Gaming Rewards Ecosystem
+🎯 The Problem
 
-> **Team Jardine³** | Vibe Coding Competition 2025 | *"Democratizing development so anyone, anywhere can build something life-changing"*
+Kids and Gen Z spend hours every day on their phones — and the #1 thing they’re doing is gaming.
+Mobile gaming now sees 3B monthly app downloads every year, and 75% of players are Gen Z.
 
-[![iOS App](https://img.shields.io/badge/iOS_App-TestFlight-blue?style=for-the-badge&logo=apple)](https://testflight.apple.com/join/vH9Bxxrg)
-[![Web Platform](https://img.shields.io/badge/Web_Platform-Live_Demo-green?style=for-the-badge&logo=vercel)](https://finalplayd.vercel.app/)
-[![Partner Portal](https://img.shields.io/badge/Partner_Portal-B2B_Network-purple?style=for-the-badge&logo=vercel)](https://playd-partner-portal.vercel.app)
+Here’s the issue:
+	•	1.5B of these gamers are actively paying, spending an average of $174/year on in-game purchases.
+	•	They’re trading real money for coins and skins… while 67% of them are living paycheck to paycheck.
+	•	Instead of learning good financial habits, games are reinforcing detachment from the value of money.
 
----
+And the alternatives? Financial literacy apps and gamified classes? Kids hate them. They don’t engage.
 
-## 🚀 **The Revolution**
+💡 The Play’d Solution
 
-Play'd transforms mobile gaming by creating the **first universal rewards ecosystem** that bridges players, games, and real-world benefits. Instead of isolated in-game currencies that trap value, players earn **Darumas** (🪆) that work across multiple games and unlock tangible rewards.
+Play’d flips the script. We turn gaming addiction into positive action by connecting in-game rewards to real-world good habits.
 
-### **🎯 The Problem**
-- **$138B mobile gaming market** with fragmented reward systems
-- Players lose progress when switching games
-- In-game purchases provide no cross-platform value
-- Gaming achievements don't translate to real-world benefits
+Imagine this:
+You’re playing Madden 26 on your phone and want to add Peyton Manning to your team. Normally that’s 1,000 Madden Coins = $5.99 down the drain.
 
-### **💡 Our Revolutionary Solution**
-**Universal Currency System**: Darumas earned in one game unlock rewards in others
-- Play Monopoly GO → Redeem rewards in Candy Crush
-- Achieve milestones in Roblox → Get real-world gift cards
-- Build cross-game progression that never resets
+With Play’d, instead of paying cash, you go to the Play’d Marketplace:
+	•	Add money to your savings account.
+	•	Instantly exchange that for Madden Coins.
+	•	Unlock Peyton Manning for your squad while building your real-life wealth.
+
+We’re rewiring the psychology of money — using the same dopamine loops that make gaming addictive, but to train healthier financial, wellness, and learning habits.
+
+💰 The Business Model
+
+Banks, wellness apps, and learning platforms are desperate to reach Gen Z. Play’d gives them direct access to 3B mobile gamers through a platform kids already love.
+
+Our monetization comes from:
+	•	Partnerships with financial, wellness, and learning platforms.
+	•	Transaction fees when players earn in-game currency by doing real-world good.
+
+Instead of “pay to play,” it’s finally time for get paid to play.
 
 ---
 
