@@ -49,10 +49,10 @@ Instead of “pay to play,” it’s finally time for get paid to play.
 
 **[📲 Download on TestFlight](https://testflight.apple.com/join/vH9Bxxrg)**
 
-### **💻 Web Earning Platform**
+### **💻 Web Earning Platform** (included in playd-frontend-production feature branch) 
 *Complete dashboard for gaming achievements*
 
-**Game-Changing Features:**
+**Game-Changing Features:** 
 - 📊 **Multi-Game Dashboard** - See progress across your entire gaming portfolio
 - 🎯 **Cross-Platform Challenges** - Complete tasks spanning multiple games
 - 🏆 **Universal Leaderboards** - Compete across the entire ecosystem
@@ -60,7 +60,7 @@ Instead of “pay to play,” it’s finally time for get paid to play.
 
 **[🌐 Try Live Demo](https://finalplayd.vercel.app/)**
 
-### **🤝 B2B Partner Portal**
+### **🤝 B2B Partner Portal** (included in partner-portal feature branch)
 *Self-service onboarding for the gaming revolution*
 
 **Business Transformation:**
