@@ -8,6 +8,9 @@ struct Game: Identifiable, Codable {
     let dollarValue: Double
     let currencyName: String
     let currencyAmount: Int
+    let deepLink: String
+    let appStoreURL: String
+    let bundleIdentifier: String
 
     var conversionText: String {
         return "\(conversionRate) coins = \(currencyAmount) \(currencyName.lowercased())"

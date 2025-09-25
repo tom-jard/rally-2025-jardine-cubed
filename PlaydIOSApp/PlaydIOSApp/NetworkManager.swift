@@ -90,7 +90,10 @@ class NetworkManager {
                     conversionRate: conversionRate,
                     dollarValue: dollarValue,
                     currencyName: "Items",
-                    currencyAmount: conversionRate
+                    currencyAmount: conversionRate,
+                    deepLink: "\(id)://",
+                    appStoreURL: "https://apps.apple.com/app/\(id)",
+                    bundleIdentifier: "com.unknown.\(id)"
                 )
             }
 

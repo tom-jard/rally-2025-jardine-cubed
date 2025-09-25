@@ -48,12 +48,78 @@ struct GamesView: View {
 
     private func loadGames() {
         games = [
-            Game(id: "monopoly-go", name: "Monopoly GO", icon: "monopoly_go", conversionRate: 120, dollarValue: 1.00, currencyName: "Rolls", currencyAmount: 100),
-            Game(id: "candy-crush", name: "Candy Crush", icon: "candy_crush", conversionRate: 100, dollarValue: 0.80, currencyName: "Gold Bars", currencyAmount: 80),
-            Game(id: "madden-mobile", name: "Madden NFL", icon: "madden", conversionRate: 200, dollarValue: 1.50, currencyName: "Madden Cash", currencyAmount: 150),
-            Game(id: "royal-match", name: "Royal Match", icon: "royal_match", conversionRate: 150, dollarValue: 1.20, currencyName: "Coins", currencyAmount: 120),
-            Game(id: "roblox", name: "Roblox", icon: "roblox", conversionRate: 250, dollarValue: 2.00, currencyName: "Robux", currencyAmount: 200),
-            Game(id: "clash-of-clans", name: "Clash of Clans", icon: "clash_of_clans", conversionRate: 180, dollarValue: 1.30, currencyName: "Gems", currencyAmount: 130)
+            Game(
+                id: "monopoly-go",
+                name: "Monopoly GO",
+                icon: "monopoly_go",
+                conversionRate: 120,
+                dollarValue: 1.00,
+                currencyName: "Rolls",
+                currencyAmount: 100,
+                deepLink: "monopolygo://",
+                appStoreURL: "https://apps.apple.com/us/app/monopoly-go/id1496506010",
+                bundleIdentifier: "com.scopely.monopolygo"
+            ),
+            Game(
+                id: "candy-crush",
+                name: "Candy Crush",
+                icon: "candy_crush",
+                conversionRate: 100,
+                dollarValue: 0.80,
+                currencyName: "Gold Bars",
+                currencyAmount: 80,
+                deepLink: "candycrushsaga://",
+                appStoreURL: "https://apps.apple.com/us/app/candy-crush-saga/id553834731",
+                bundleIdentifier: "com.king.candycrushsaga"
+            ),
+            Game(
+                id: "madden-mobile",
+                name: "Madden NFL",
+                icon: "madden",
+                conversionRate: 200,
+                dollarValue: 1.50,
+                currencyName: "Madden Cash",
+                currencyAmount: 150,
+                deepLink: "maddennfl://",
+                appStoreURL: "https://apps.apple.com/us/app/madden-nfl-24-mobile-football/id1052222233",
+                bundleIdentifier: "com.ea.game.maddenmobile"
+            ),
+            Game(
+                id: "royal-match",
+                name: "Royal Match",
+                icon: "royal_match",
+                conversionRate: 150,
+                dollarValue: 1.20,
+                currencyName: "Coins",
+                currencyAmount: 120,
+                deepLink: "royalmatch://",
+                appStoreURL: "https://apps.apple.com/us/app/royal-match/id1458154515",
+                bundleIdentifier: "com.dreamgames.royalmatch"
+            ),
+            Game(
+                id: "roblox",
+                name: "Roblox",
+                icon: "roblox",
+                conversionRate: 250,
+                dollarValue: 2.00,
+                currencyName: "Robux",
+                currencyAmount: 200,
+                deepLink: "roblox://",
+                appStoreURL: "https://apps.apple.com/us/app/roblox/id431946152",
+                bundleIdentifier: "com.roblox.RobloxPlayer"
+            ),
+            Game(
+                id: "clash-of-clans",
+                name: "Clash of Clans",
+                icon: "clash_of_clans",
+                conversionRate: 180,
+                dollarValue: 1.30,
+                currencyName: "Gems",
+                currencyAmount: 130,
+                deepLink: "clashofclans://",
+                appStoreURL: "https://apps.apple.com/us/app/clash-of-clans/id529479190",
+                bundleIdentifier: "com.supercell.magic"
+            )
         ]
     }
 }
@@ -152,6 +218,8 @@ struct RedeemSheet: View {
     @EnvironmentObject var userState: UserState
     @State private var selectedAmount = 10
     @State private var showSuccess = false
+    @State private var showDeepLinkAlert = false
+    @StateObject private var deepLinkManager = DeepLinkManager.shared
 
     private var rollOptions = [10, 25, 50]
 
@@ -262,10 +330,32 @@ struct RedeemSheet: View {
         }
         .alert("Success!", isPresented: $showSuccess) {
             Button("OK") {
-                isPresented = false
+                showDeepLinkAlert = true
             }
         } message: {
             Text("Purchased \(selectedAmount) \(game.currencyName.lowercased()) for \(game.name)!")
+        }
+        .alert("Open \(game.name)?", isPresented: $showDeepLinkAlert) {
+            if deepLinkManager.isAppInstalled(game) {
+                Button("Open App") {
+                    deepLinkManager.openApp(game) { success in
+                        isPresented = false
+                    }
+                }
+            } else {
+                Button("Open in App Store") {
+                    deepLinkManager.openAppStore(game) { success in
+                        isPresented = false
+                    }
+                }
+            }
+            Button("Maybe Later") {
+                isPresented = false
+            }
+        } message: {
+            Text(deepLinkManager.isAppInstalled(game) ?
+                 "Your \(game.currencyName.lowercased()) are ready! Open \(game.name) to use them." :
+                 "\(game.name) isn't installed. Get it from the App Store to use your \(game.currencyName.lowercased()).")
         }
     }
 

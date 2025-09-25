@@ -5,6 +5,7 @@ import GameKit
 struct PlaydApp: App {
     @StateObject private var gameCenter = GameCenterManager.shared
     @StateObject private var userState = UserState.shared
+    @StateObject private var deepLinkManager = DeepLinkManager.shared
 
     var body: some Scene {
         WindowGroup {
@@ -14,6 +15,7 @@ struct PlaydApp: App {
                 }
                 .environmentObject(gameCenter)
                 .environmentObject(userState)
+                .environmentObject(deepLinkManager)
         }
     }
 }
