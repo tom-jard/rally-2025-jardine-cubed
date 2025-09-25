@@ -4,7 +4,7 @@
   "framework": "vite",
   "functions": {
     "api/*.js": {
-      "runtime": "nodejs18.x"
+      "runtime": "@vercel/node"
     }
   },
   "rewrites": [
@@ -27,10 +27,5 @@
         }
       ]
     }
-  ],
-  "env": {
-    "PLAID_CLIENT_ID": "68d44d11d58efa00251413e1",
-    "PLAID_SECRET": "047a640b4e33dc44257278f7f9a718",
-    "PLAID_ENV": "sandbox"
-  }
+  ]
 }

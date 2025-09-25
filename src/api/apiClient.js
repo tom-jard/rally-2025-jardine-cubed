@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+<<<<<<< HEAD
 // Determine API URL based on environment
 const getApiUrl = () => {
   // Check if we're running on Vercel or production
@@ -25,6 +26,11 @@ console.log('🌍 Environment:', {
 
 const apiClient = axios.create({
   baseURL,
+=======
+// Create axios instance with base configuration
+const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+>>>>>>> a14c8d7ecbd96607d343334157e279a985269009
   headers: {
     'Content-Type': 'application/json',
   },
