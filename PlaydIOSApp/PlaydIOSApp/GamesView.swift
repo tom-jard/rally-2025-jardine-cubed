@@ -69,69 +69,69 @@ struct GamesView: View {
                 ]
             ),
             Game(
-                id: "candy-crush",
-                name: "Candy Crush",
+                id: "candycrushsaga",
+                name: "Candy Crush Saga",
                 icon: "candy_crush",
                 conversionRate: 100,
-                dollarValue: 0.80,
+                dollarValue: 1.0,
                 currencyName: "Gold Bars",
-                currencyAmount: 80,
-                deepLink: "candycrushsaga://",
+                currencyAmount: 100,
+                deepLink: "https://ccs.play.king.com/",
                 appStoreURL: "https://apps.apple.com/us/app/candy-crush-saga/id553834731",
                 bundleIdentifier: "com.king.candycrushsaga",
-                alternateSchemes: ["king://", "com.king.candycrushsaga://", "candy-crush://"]
+                alternateSchemes: []
             ),
             Game(
-                id: "madden-mobile",
-                name: "Madden NFL",
+                id: "maddennfl",
+                name: "Madden NFL Mobile",
                 icon: "madden",
-                conversionRate: 200,
-                dollarValue: 1.50,
-                currencyName: "Madden Cash",
-                currencyAmount: 150,
-                deepLink: "maddennfl://",
-                appStoreURL: "https://apps.apple.com/us/app/madden-nfl-26-mobile-football/id1512265589",
-                bundleIdentifier: "com.ea.game.maddenmobile",
-                alternateSchemes: ["com.ea.game.maddenmobile://", "madden://", "ea://"]
+                conversionRate: 100,
+                dollarValue: 1.0,
+                currencyName: "Cash",
+                currencyAmount: 100,
+                deepLink: "https://apps.apple.com/us/app/madden-nfl-24-mobile-football/id1094930513",
+                appStoreURL: "https://apps.apple.com/us/app/madden-nfl-24-mobile-football/id1094930513",
+                bundleIdentifier: "com.ea.ios.maddenmobile",
+                alternateSchemes: []
             ),
             Game(
-                id: "royal-match",
+                id: "royalmatch",
                 name: "Royal Match",
                 icon: "royal_match",
-                conversionRate: 150,
-                dollarValue: 1.20,
+                conversionRate: 100,
+                dollarValue: 1.0,
                 currencyName: "Coins",
-                currencyAmount: 120,
-                deepLink: "royalmatch://",
+                currencyAmount: 100,
+                deepLink: "https://apps.apple.com/us/app/royal-match/id1482155847",
                 appStoreURL: "https://apps.apple.com/us/app/royal-match/id1482155847",
                 bundleIdentifier: "com.dreamgames.royalmatch",
-                alternateSchemes: ["com.dreamgames.royalmatch://", "royal-match://", "dreamgames://"]
+                alternateSchemes: []
             ),
             Game(
                 id: "roblox",
                 name: "Roblox",
                 icon: "roblox",
-                conversionRate: 250,
-                dollarValue: 2.00,
+                conversionRate: 100,
+                dollarValue: 1.0,
                 currencyName: "Robux",
-                currencyAmount: 200,
-                deepLink: "roblox://",
+                currencyAmount: 100,
+                deepLink: "https://www.roblox.com/games/",
                 appStoreURL: "https://apps.apple.com/us/app/roblox/id431946152",
-                bundleIdentifier: "com.roblox.RobloxPlayer",
-                alternateSchemes: ["com.roblox.RobloxPlayer://", "robloxmobile://"]
+                bundleIdentifier: "com.roblox.robloxmobile",
+                alternateSchemes: ["roblox://"]
             ),
             Game(
-                id: "clash-of-clans",
+                id: "clashofclans",
                 name: "Clash of Clans",
                 icon: "clash_of_clans",
-                conversionRate: 180,
-                dollarValue: 1.30,
+                conversionRate: 100,
+                dollarValue: 1.0,
                 currencyName: "Gems",
-                currencyAmount: 130,
-                deepLink: "clashofclans://",
+                currencyAmount: 100,
+                deepLink: "https://link.clashofclans.com/",
                 appStoreURL: "https://apps.apple.com/us/app/clash-of-clans/id529479190",
                 bundleIdentifier: "com.supercell.magic",
-                alternateSchemes: ["supercell://", "com.supercell.magic://", "clash://"]
+                alternateSchemes: ["clashofclans://"]
             )
         ]
     }
@@ -275,39 +275,38 @@ struct RedeemSheet: View {
                 // Selection options - iOS style picker
                 VStack(spacing: 12) {
                     ForEach(rollOptions, id: \.self) { rolls in
-                        Button(action: {
-                            selectedAmount = rolls
-                        }) {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text("\(rolls) \(game.currencyName)")
-                                        .font(.headline)
-                                        .foregroundColor(.primary)
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("\(rolls) \(game.currencyName)")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
 
-                                    Text("\(rolls * (game.conversionRate / game.currencyAmount)) coins")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-
-                                Spacer()
-
-                                if selectedAmount == rolls {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundColor(.blue)
-                                        .font(.title3)
-                                }
+                                Text("\(rolls * (game.conversionRate / game.currencyAmount)) coins")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
                             }
-                            .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(selectedAmount == rolls ? Color.blue.opacity(0.1) : Color.clear)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(selectedAmount == rolls ? Color.blue : Color.gray.opacity(0.3), lineWidth: 1)
-                                    )
-                            )
+
+                            Spacer()
+
+                            if selectedAmount == rolls {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.blue)
+                                    .font(.title3)
+                            }
                         }
-                        .buttonStyle(PlainButtonStyle())
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(selectedAmount == rolls ? Color.blue.opacity(0.1) : Color.clear)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(selectedAmount == rolls ? Color.blue : Color.gray.opacity(0.3), lineWidth: 1)
+                                )
+                        )
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            selectedAmount = rolls
+                        }
                     }
                 }
                 .padding(.horizontal)
