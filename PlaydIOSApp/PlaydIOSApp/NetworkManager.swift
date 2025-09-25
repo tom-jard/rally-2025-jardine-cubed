@@ -145,6 +145,22 @@ class NetworkManager {
     }
 
     func redeemCoins(gameId: String, coinsToSpend: Int, completion: @escaping (Bool, String) -> Void) {
+        // Demo mode - simulate successful redemption for demo purposes
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            let currentBalance = UserState.shared.coinBalance
+
+            if coinsToSpend > currentBalance {
+                completion(false, "Insufficient coins")
+                return
+            }
+
+            let newBalance = currentBalance - coinsToSpend
+            UserState.shared.updateBalance(newBalance)
+            completion(true, "Successfully redeemed!")
+        }
+
+        // Production code (commented for demo)
+        /*
         guard let url = URL(string: "\(baseURL)/api/redeem"),
               let token = UserState.shared.token else {
             completion(false, "Authentication required")
@@ -180,6 +196,7 @@ class NetworkManager {
                 completion(false, error)
             }
         }.resume()
+        */
     }
 
     func completeChallenge(challengeId: String, completion: @escaping (Bool, Int) -> Void) {

@@ -9,31 +9,28 @@ struct GamesView: View {
     @EnvironmentObject var userState: UserState
 
     var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(spacing: 16) {
-                    // Games Grid
-                    LazyVGrid(columns: [
-                        GridItem(.flexible(), spacing: 16),
-                        GridItem(.flexible(), spacing: 16)
-                    ], spacing: 16) {
-                        ForEach(games) { game in
-                            GameAppCard(game: game) {
-                                selectedGame = game
-                                redemptionAmount = game.conversionRate
-                                showRedeemSheet = true
-                            }
+        List {
+            Section {
+                LazyVGrid(columns: [
+                    GridItem(.flexible(), spacing: 12),
+                    GridItem(.flexible(), spacing: 12)
+                ], spacing: 16) {
+                    ForEach(games) { game in
+                        GameAppCard(game: game) {
+                            selectedGame = game
+                            redemptionAmount = game.conversionRate
+                            showRedeemSheet = true
                         }
                     }
-                    .padding(.horizontal)
-                    .padding(.top)
-                    .padding(.bottom, 100)
                 }
+                .padding(.vertical, 8)
+            } header: {
+                Text("Popular Games")
+                    .font(.headline)
+                    .fontWeight(.semibold)
             }
-            .background(Color(UIColor.systemGroupedBackground))
-            .navigationBarTitleDisplayMode(.large)
-            .navigationTitle("Redeem Coins")
         }
+        .navigationTitle("Redeem Coins")
         .onAppear {
             loadGames()
         }
@@ -51,12 +48,12 @@ struct GamesView: View {
 
     private func loadGames() {
         games = [
-            Game(id: "monopoly-go", name: "Monopoly GO", icon: "🎲", conversionRate: 120, dollarValue: 1.00, currencyName: "Rolls", currencyAmount: 100),
-            Game(id: "candy-crush", name: "Candy Crush", icon: "🍬", conversionRate: 100, dollarValue: 0.80, currencyName: "Gold Bars", currencyAmount: 80),
-            Game(id: "madden-mobile", name: "Madden NFL", icon: "🏈", conversionRate: 200, dollarValue: 1.50, currencyName: "Madden Cash", currencyAmount: 150),
-            Game(id: "royal-match", name: "Royal Match", icon: "👑", conversionRate: 150, dollarValue: 1.20, currencyName: "Coins", currencyAmount: 120),
-            Game(id: "roblox", name: "Roblox", icon: "🎮", conversionRate: 250, dollarValue: 2.00, currencyName: "Robux", currencyAmount: 200),
-            Game(id: "coin-master", name: "Coin Master", icon: "🪙", conversionRate: 80, dollarValue: 0.60, currencyName: "Spins", currencyAmount: 60)
+            Game(id: "monopoly-go", name: "Monopoly GO", icon: "monopoly_go", conversionRate: 120, dollarValue: 1.00, currencyName: "Rolls", currencyAmount: 100),
+            Game(id: "candy-crush", name: "Candy Crush", icon: "candy_crush", conversionRate: 100, dollarValue: 0.80, currencyName: "Gold Bars", currencyAmount: 80),
+            Game(id: "madden-mobile", name: "Madden NFL", icon: "madden", conversionRate: 200, dollarValue: 1.50, currencyName: "Madden Cash", currencyAmount: 150),
+            Game(id: "royal-match", name: "Royal Match", icon: "royal_match", conversionRate: 150, dollarValue: 1.20, currencyName: "Coins", currencyAmount: 120),
+            Game(id: "roblox", name: "Roblox", icon: "roblox", conversionRate: 250, dollarValue: 2.00, currencyName: "Robux", currencyAmount: 200),
+            Game(id: "clash-of-clans", name: "Clash of Clans", icon: "clash_of_clans", conversionRate: 180, dollarValue: 1.30, currencyName: "Gems", currencyAmount: 130)
         ]
     }
 }
@@ -69,47 +66,43 @@ struct GameAppCard: View {
     @State private var alertMessage = ""
 
     var body: some View {
-        Button(action: {
-            onTap()
-        }) {
+        Button(action: onTap) {
             VStack(spacing: 12) {
-                // App Icon
-                ZStack {
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(gradientForGame(game.id))
-                        .frame(width: 70, height: 70)
+                // App Icon with iOS App Store style
+                Image(game.icon)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 64, height: 64)
+                    .cornerRadius(18)
+                    .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
 
-                    Text(game.icon)
-                        .font(.system(size: 36))
+                VStack(spacing: 4) {
+                    // App Name
+                    Text(game.name)
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(.primary)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.center)
+
+                    // Cost
+                    Text("\(game.conversionRate) coins")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+
+                    // Get Button - iOS App Store style
+                    Button(action: onTap) {
+                        Text("GET")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(.white)
+                            .frame(width: 60, height: 24)
+                            .background(Color.blue)
+                            .cornerRadius(12)
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
-                .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
-
-                // App Name
-                Text(game.name)
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.primary)
-                    .lineLimit(1)
-
-                // Conversion Rate
-                Text(game.conversionText)
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-
-                // Redeem Button
-                Text("Redeem")
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.blue)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 6)
-                    .background(Color.blue.opacity(0.1))
-                    .cornerRadius(12)
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .background(Color(UIColor.secondarySystemGroupedBackground))
-            .cornerRadius(16)
+            .padding(.vertical, 12)
         }
         .buttonStyle(PlainButtonStyle())
         .alert("Redemption", isPresented: $showAlert) {
@@ -138,24 +131,6 @@ struct GameAppCard: View {
         }
     }
 
-    private func gradientForGame(_ id: String) -> LinearGradient {
-        switch id {
-        case "monopoly-go":
-            return LinearGradient(colors: [.red, .orange], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case "candy-crush":
-            return LinearGradient(colors: [.pink, .purple], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case "madden-mobile":
-            return LinearGradient(colors: [.blue, .cyan], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case "royal-match":
-            return LinearGradient(colors: [.purple, .pink], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case "roblox":
-            return LinearGradient(colors: [.red, .yellow], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case "coin-master":
-            return LinearGradient(colors: [.yellow, .orange], startPoint: .topLeading, endPoint: .bottomTrailing)
-        default:
-            return LinearGradient(colors: [.blue, .purple], startPoint: .topLeading, endPoint: .bottomTrailing)
-        }
-    }
 }
 
 struct StoreOption {
@@ -191,101 +166,98 @@ struct RedeemSheet: View {
     }
 
     var body: some View {
-        ZStack {
-            // Clean white background
-            Color.white
-                .ignoresSafeArea()
+        NavigationView {
+            VStack(spacing: 24) {
+                VStack(spacing: 16) {
+                    // Game icon (large) - iOS style
+                    Image(game.icon)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 88, height: 88)
+                        .cornerRadius(22)
+                        .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
 
-            VStack(spacing: 30) {
-                // Close button
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        isPresented = false
-                    }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 28))
-                            .foregroundColor(.gray)
+                    VStack(spacing: 8) {
+                        // Game name
+                        Text(game.name)
+                            .font(.title2)
+                            .fontWeight(.bold)
+
+                        // Description
+                        Text("Choose how many \(game.currencyName.lowercased()) you'd like to purchase")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
                     }
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 10)
 
-                Spacer()
-
-                // Game icon (large)
-                ZStack {
-                    Circle()
-                        .fill(gradientForGame(game.id))
-                        .frame(width: 100, height: 100)
-
-                    Text(game.icon)
-                        .font(.system(size: 50))
-                }
-                .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
-
-                // Game name
-                Text(game.name)
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(.primary)
-
-                // Description
-                Text("Get more \(game.currencyName.lowercased()) to keep playing!")
-                    .font(.system(size: 16))
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
-
-                // Roll amount selection
-                HStack(spacing: 15) {
+                // Selection options - iOS style picker
+                VStack(spacing: 12) {
                     ForEach(rollOptions, id: \.self) { rolls in
                         Button(action: {
                             selectedAmount = rolls
                         }) {
-                            VStack(spacing: 8) {
-                                Text("\(rolls)")
-                                    .font(.system(size: 24, weight: .bold))
-                                    .foregroundColor(selectedAmount == rolls ? .white : .primary)
+                            HStack {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("\(rolls) \(game.currencyName)")
+                                        .font(.headline)
+                                        .foregroundColor(.primary)
 
-                                Text("\(game.currencyName)")
-                                    .font(.system(size: 12, weight: .medium))
-                                    .foregroundColor(selectedAmount == rolls ? .white : .secondary)
+                                    Text("\(rolls * (game.conversionRate / game.currencyAmount)) coins")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+
+                                Spacer()
+
+                                if selectedAmount == rolls {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundColor(.blue)
+                                        .font(.title3)
+                                }
                             }
-                            .frame(width: 80, height: 80)
+                            .padding()
                             .background(
-                                selectedAmount == rolls ?
-                                Color.blue : Color.gray.opacity(0.1)
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(selectedAmount == rolls ? Color.blue.opacity(0.1) : Color.clear)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(selectedAmount == rolls ? Color.blue : Color.gray.opacity(0.3), lineWidth: 1)
+                                    )
                             )
-                            .cornerRadius(12)
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
+                .padding(.horizontal)
 
                 Spacer()
 
-                // Purchase button
-                Button(action: {
-                    purchaseRolls()
-                }) {
-                    HStack {
-                        Text("💰")
-                            .font(.system(size: 18))
-                        Text("Purchase for \(coinCost) coins")
-                            .font(.system(size: 18, weight: .bold))
-                            .foregroundColor(.white)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(
-                        coinCost <= userState.coinBalance ?
-                        Color.blue : Color.gray
-                    )
-                    .cornerRadius(12)
+                // Purchase button - iOS style
+                Button(action: purchaseRolls) {
+                    Text("Purchase for \(coinCost) coins")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(
+                            coinCost <= userState.coinBalance ? Color.blue : Color.gray
+                        )
+                        .cornerRadius(12)
                 }
                 .disabled(coinCost > userState.coinBalance)
-                .padding(.horizontal, 20)
-                .padding(.bottom, 30)
+                .padding(.horizontal)
+            }
+            .padding()
+            .navigationTitle("Purchase \(game.currencyName)")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        isPresented = false
+                    }
+                }
             }
         }
         .alert("Success!", isPresented: $showSuccess) {
@@ -310,24 +282,6 @@ struct RedeemSheet: View {
         }
     }
 
-    private func gradientForGame(_ id: String) -> LinearGradient {
-        switch id {
-        case "monopoly-go":
-            return LinearGradient(colors: [.red, .orange], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case "candy-crush":
-            return LinearGradient(colors: [.pink, .purple], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case "madden-mobile":
-            return LinearGradient(colors: [.blue, .cyan], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case "royal-match":
-            return LinearGradient(colors: [.purple, .pink], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case "roblox":
-            return LinearGradient(colors: [.red, .yellow], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case "coin-master":
-            return LinearGradient(colors: [.yellow, .orange], startPoint: .topLeading, endPoint: .bottomTrailing)
-        default:
-            return LinearGradient(colors: [.blue, .purple], startPoint: .topLeading, endPoint: .bottomTrailing)
-        }
-    }
 }
 
 
